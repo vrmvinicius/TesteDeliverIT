@@ -57,10 +57,10 @@ namespace Infra.Dados.Principal.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PercentualJurosDia")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,4)");
 
                     b.Property<decimal>("PercentualMulta")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,4)");
 
                     b.Property<int>("QtdeDiasAtraso")
                         .HasColumnType("int");

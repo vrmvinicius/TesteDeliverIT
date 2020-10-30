@@ -16,7 +16,7 @@ namespace Infra.Dados.Principal.Migrations
                     Nome = table.Column<string>(nullable: false),
                     DataVencimento = table.Column<DateTime>(nullable: false),
                     DataPagamento = table.Column<DateTime>(nullable: false),
-                    ValorOriginal = table.Column<decimal>(nullable: false)
+                    ValorOriginal = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,9 +31,9 @@ namespace Infra.Dados.Principal.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ContasPagarId = table.Column<int>(nullable: false),
                     QtdeDiasAtraso = table.Column<int>(nullable: false),
-                    PercentualJurosDia = table.Column<decimal>(nullable: false),
-                    PercentualMulta = table.Column<decimal>(nullable: false),
-                    ValorPago = table.Column<decimal>(nullable: false)
+                    PercentualJurosDia = table.Column<decimal>(type: "decimal(10,4)", nullable: false),
+                    PercentualMulta = table.Column<decimal>(type: "decimal(10,4)", nullable: false),
+                    ValorPago = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {

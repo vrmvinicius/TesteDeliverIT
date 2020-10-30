@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Dados.Principal.Migrations
 {
     [DbContext(typeof(DbContextTeste))]
-    [Migration("20201030153043_CreateDatabase")]
+    [Migration("20201030191218_CreateDatabase")]
     partial class CreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,10 +38,10 @@ namespace Infra.Dados.Principal.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ValorOriginal")
-                        .HasColumnType("decimal(16,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -59,16 +59,16 @@ namespace Infra.Dados.Principal.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PercentualJurosDia")
-                        .HasColumnType("decimal(16,2)");
+                        .HasColumnType("decimal(10,4)");
 
                     b.Property<decimal>("PercentualMulta")
-                        .HasColumnType("decimal(16,2)");
+                        .HasColumnType("decimal(10,4)");
 
                     b.Property<int>("QtdeDiasAtraso")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ValorPago")
-                        .HasColumnType("decimal(16,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

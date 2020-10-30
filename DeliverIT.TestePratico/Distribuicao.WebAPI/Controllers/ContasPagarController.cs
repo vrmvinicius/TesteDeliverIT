@@ -69,6 +69,9 @@ namespace Distribuicao.WebAPI.Controllers
             try
             {
                 var conta = await _servicoApp.GetByIdAsync(id);
+                if (conta == null)
+                    return NotFound($"Nenhuma conta encontrada para o código {id}.");
+
                 return Ok(conta);
             }
             catch (Exception ex)

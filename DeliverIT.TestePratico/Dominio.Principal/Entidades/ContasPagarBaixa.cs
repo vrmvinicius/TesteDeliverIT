@@ -17,9 +17,12 @@ namespace Dominio.Principal.Entidades
         public int Id { get; set; }                
         public int ContasPagarId { get; set; }
         public virtual ContasPagar ContasPagar { get; private set; }                
-        public int QtdeDiasAtraso { get; private set; }        
-        public decimal PercentualJurosDia { get; private set; }        
-        public decimal PercentualMulta { get; private set; }        
+        public int QtdeDiasAtraso { get; private set; }
+        [Column(TypeName="decimal(10,4)")]
+        public decimal PercentualJurosDia { get; private set; }
+        [Column(TypeName="decimal(10,4)")]
+        public decimal PercentualMulta { get; private set; }
+        [Column(TypeName="decimal(18,2)")]
         public decimal ValorPago { get; private set; }
 
         public ContasPagarBaixa()
