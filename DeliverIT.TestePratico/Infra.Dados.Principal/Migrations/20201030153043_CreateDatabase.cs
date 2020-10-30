@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infra.Dados.Principal.Migrations
 {
-    public partial class GenerateDatabase : Migration
+    public partial class CreateDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace Infra.Dados.Principal.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(nullable: false, maxLength: 60),
+                    Nome = table.Column<string>(nullable: false),
                     DataVencimento = table.Column<DateTime>(nullable: false),
                     DataPagamento = table.Column<DateTime>(nullable: false),
                     ValorOriginal = table.Column<decimal>(nullable: false)
@@ -43,13 +43,14 @@ namespace Infra.Dados.Principal.Migrations
                         column: x => x.ContasPagarId,
                         principalTable: "ContasPagar",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContasPagarBaixas_ContasPagarId",
                 table: "ContasPagarBaixas",
-                column: "ContasPagarId");
+                column: "ContasPagarId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

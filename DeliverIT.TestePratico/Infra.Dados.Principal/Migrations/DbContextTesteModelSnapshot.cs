@@ -27,12 +27,15 @@ namespace Infra.Dados.Principal.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("DataPagamento")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataVencimento")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ValorOriginal")
@@ -50,7 +53,7 @@ namespace Infra.Dados.Principal.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ContasPagarId")
+                    b.Property<int>("ContasPagarId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PercentualJurosDia")
@@ -67,7 +70,8 @@ namespace Infra.Dados.Principal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContasPagarId");
+                    b.HasIndex("ContasPagarId")
+                        .IsUnique();
 
                     b.ToTable("ContasPagarBaixas");
                 });
@@ -75,8 +79,10 @@ namespace Infra.Dados.Principal.Migrations
             modelBuilder.Entity("Dominio.Principal.Entidades.ContasPagarBaixa", b =>
                 {
                     b.HasOne("Dominio.Principal.Entidades.ContasPagar", "ContasPagar")
-                        .WithMany("ContasPagarBaixa")
-                        .HasForeignKey("ContasPagarId");
+                        .WithOne("ContasPagarBaixa")
+                        .HasForeignKey("Dominio.Principal.Entidades.ContasPagarBaixa", "ContasPagarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

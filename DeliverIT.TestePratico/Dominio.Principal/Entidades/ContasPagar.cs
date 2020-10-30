@@ -14,38 +14,30 @@ namespace Dominio.Principal.Entidades
     {
         private ContasPagarValidator _validator;
         
+        [Key]
         public int Id { get; set; }        
-        public string Nome { get; set; }        
+        [Required]
+        public string Nome { get; set; }
+        [Required]
         public DateTime? DataVencimento { get; set; }
+        [Required]
         public DateTime? DataPagamento { get; set; }
-        public decimal ValorOriginal { get; set; }
-        public virtual List<ContasPagarBaixa> ContasPagarBaixa { get; set; }
+        [Required]        
+        public decimal ValorOriginal { get; set; }        
+        public virtual ContasPagarBaixa ContasPagarBaixa { get; private set; }
 
         public ContasPagar()
-        {            
-            ContasPagarBaixa = new List<ContasPagarBaixa>();
+        {
+            ContasPagarBaixa = new ContasPagarBaixa(this);
         }
 
-        public virtual void AdicionarBaixa()
+        public ContasPagar(string nome, DateTime? dataVencimento, DateTime? dataPagamento, decimal valorOriginal)
         {
-            var validationResult = this.Validar();
-            if (!validationResult.IsValid)
-                throw new ArgumentException("Um ou mais problemas ocorreram na tentativa de lançar a baixa. Verifique. \n" +
-                                             string.Join("\n", validationResult.Errors.ToList()));
-
-            ContasPagarBaixa cpb = new ContasPagarBaixa(this);
-
-            validationResult = cpb.Validar();
-            if (!validationResult.IsValid)
-                throw new ArgumentException("Um ou mais problemas ocorreram na tentativa de lançar a baixa. Verifique. \n" +
-                                             string.Join("\n", validationResult.Errors.ToList()));
-                    
-            ContasPagarBaixa.Add(cpb);                  
-        }
-
-        public virtual void RemoverBaixa(ContasPagarBaixa contasPagarBaixa)
-        {
-            ContasPagarBaixa.Remove(contasPagarBaixa);
+            Nome = nome;
+            DataVencimento = dataVencimento;
+            DataPagamento = dataPagamento;
+            ValorOriginal = valorOriginal;
+            ContasPagarBaixa = new ContasPagarBaixa(this);
         }
 
         public ValidationResult Validar()
@@ -53,6 +45,14 @@ namespace Dominio.Principal.Entidades
             if (_validator == null)
                 _validator = new ContasPagarValidator();
 
+            //Valida o processo da baixa (pagamento).
+            if(ContasPagarBaixa != null)
+            {                            
+                var validatorContasPagarBaixa = ContasPagarBaixa.Validar();
+                if (!validatorContasPagarBaixa.IsValid)
+                    return validatorContasPagarBaixa;
+            }
+            //Valida a 'capa'.
             return _validator.Validate(this);
         }
     }

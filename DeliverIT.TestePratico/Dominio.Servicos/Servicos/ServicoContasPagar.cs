@@ -42,15 +42,8 @@ namespace Dominio.Servicos.Servicos
             try
             {
                 //Cria o objeto de domínio.
-                ContasPagar contasPagar = new ContasPagar
-                {
-                    Nome = obj.Nome,
-                    DataVencimento = obj.DataVencimento,
-                    DataPagamento = obj.DataPagamento,
-                    ValorOriginal = obj.ValorOriginal
-                };
-                //Inclui a baixa.
-                contasPagar.AdicionarBaixa();
+                ContasPagar contasPagar = new ContasPagar(obj.Nome, obj.DataVencimento, obj.DataPagamento, obj.ValorOriginal);
+                                                
                 //Valida a entidade novamente.
                 var validation = contasPagar.Validar();
                 if(!validation.IsValid)

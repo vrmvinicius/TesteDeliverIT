@@ -11,11 +11,11 @@ namespace Infra.CrossCutting.DTO.ContasPagar
         public DateTime? DataVencimento { get; set; }
         public DateTime? DataPagamento { get; set; }
         public decimal ValorOriginal { get; set; }
-        public List<ContasPagarBaixaDTO> ContasPagarBaixa { get; set; }
+        public ContasPagarBaixaDTO ContasPagarBaixa { get; set; }
 
         public ContasPagarDTO()
         {
-            ContasPagarBaixa = new List<ContasPagarBaixaDTO>();
+            ContasPagarBaixa = new ContasPagarBaixaDTO();
         }
     }
 }

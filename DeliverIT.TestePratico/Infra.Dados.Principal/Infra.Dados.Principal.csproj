@@ -5,10 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20201029183803_GenerateDatabase.cs" />
-    <Compile Remove="Migrations\20201029183803_GenerateDatabase.Designer.cs" />
-    <Compile Remove="Migrations\20201029184457_GenerateDatabase.cs" />
-    <Compile Remove="Migrations\20201029184457_GenerateDatabase.Designer.cs" />
+    <Compile Remove="Migrations\20201030152057_CreateDatabase.cs" />
+    <Compile Remove="Migrations\20201030152057_CreateDatabase.Designer.cs" />
+    <Compile Remove="Migrations\20201030152409_CreateDatabase.cs" />
+    <Compile Remove="Migrations\20201030152409_CreateDatabase.Designer.cs" />
+    <Compile Remove="Migrations\20201030152931_CreateDatabase.cs" />
+    <Compile Remove="Migrations\20201030152931_CreateDatabase.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

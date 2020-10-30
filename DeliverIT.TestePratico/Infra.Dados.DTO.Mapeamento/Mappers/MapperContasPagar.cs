@@ -17,8 +17,8 @@ namespace Infra.Dados.DTO.Mapeamento.Mappers
             CreateMap<ContasPagarDTO, ContasPagar>();
 
             var entidadeParaListagemDto = CreateMap<ContasPagar, ContasPagarListagemDTO>();
-            entidadeParaListagemDto.ForMember(x => x.QuantidadeDiasAtraso, mc => mc.MapFrom(ent => ent.ContasPagarBaixa.Sum(s => s.QtdeDiasAtraso)));
-            entidadeParaListagemDto.ForMember(x => x.ValorCorrigido, mc => mc.MapFrom(ent => ent.ContasPagarBaixa.Sum(s => s.ValorPago)));
+            entidadeParaListagemDto.ForMember(x => x.QuantidadeDiasAtraso, mc => mc.MapFrom(ent => ent.ContasPagarBaixa.QtdeDiasAtraso));
+            entidadeParaListagemDto.ForMember(x => x.ValorCorrigido, mc => mc.MapFrom(ent => ent.ContasPagarBaixa.ValorPago));
         }
     }
 }

@@ -2,6 +2,7 @@
 using Infra.CrossCutting.DTO.ContasPagar;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,32 +10,41 @@ using System.Threading.Tasks;
 
 namespace Distribuicao.WebAPI.Controllers
 {
-    [Route("contaspagar")]
+    [Route("api/contaspagar")]
     [ApiController]
     public class ContasPagarController : ControllerBase
     {
         private readonly IAppContasPagar _servicoApp;
-        
-        public ContasPagarController(IAppContasPagar servicoApp)
+        private readonly ILogger<ContasPagarController> _logger;
+
+        public ContasPagarController(IAppContasPagar servicoApp, ILogger<ContasPagarController> logger)
         {
-            _servicoApp = servicoApp;            
+            _servicoApp = servicoApp;
+            _logger = logger;
         }
                 
         [HttpPost]
-        public async Task<ActionResult> AdicionarDesenvolvedor([FromBody] ContasPagarInclusaoDTO contaPagarInclusaoDto)
+        public async Task<ActionResult> IncluirContaPagar([FromBody] List<ContasPagarInclusaoDTO> contasPagarInclusaoDto)
         {
             try
             {
-                var resultado = await _servicoApp.IncluirContaPagar(contaPagarInclusaoDto);
-                return CreatedAtRoute("GetContaPagar", new { id = resultado.Id }, resultado);
+                var rotas = new List<CreatedAtRouteResult>();
+                foreach(var conta in contasPagarInclusaoDto)
+                {
+                    var resultado = await _servicoApp.IncluirContaPagar(conta);
+                    rotas.Add(CreatedAtRoute("GetContaPagar", new { id = resultado.Id }, resultado));
+                }
+                return Ok(rotas);
             }
             catch(ArgumentException ex)
             {
+                _logger.LogWarning(ex.ToString());
                 return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.LogError(ex.ToString());
+                return StatusCode(500, $"Ocorreu uma falha inesperada. Entre em contato com o suporte técnico.");
             }
         }
 
@@ -43,11 +53,13 @@ namespace Distribuicao.WebAPI.Controllers
         {
             try
             {
-                return await _servicoApp.ListarContas();
+                var contas = await _servicoApp.ListarContas();
+                return Ok(contas);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu uma falha inesperada. Entre em contato com o suporte técnico.");
+                _logger.LogError(ex.ToString());
+                return StatusCode(500, $"Ocorreu uma falha inesperada. Entre em contato com o suporte técnico.");
             }
         }
 
@@ -56,11 +68,13 @@ namespace Distribuicao.WebAPI.Controllers
         {
             try
             {
-                return await _servicoApp.GetByIdAsync(id);
+                var conta = await _servicoApp.GetByIdAsync(id);
+                return Ok(conta);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu uma falha inesperada. Entre em contato com o suporte técnico.");
+                _logger.LogError(ex.ToString());
+                return StatusCode(500, $"Ocorreu uma falha inesperada. Entre em contato com o suporte técnico.");
             }
         }
     }

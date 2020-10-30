@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
@@ -11,18 +12,18 @@ namespace Dominio.Principal.Entidades
     public class ContasPagarBaixa
     {
         private ContasPagarBaixaValidator _validator;
-                
-        public int Id { get; set; }        
+
+        [Key]
+        public int Id { get; set; }                
         public int ContasPagarId { get; set; }
         public virtual ContasPagar ContasPagar { get; private set; }                
-        public int QtdeDiasAtraso { get; private set; }
-        public decimal PercentualJurosDia { get; private set; }
-        public decimal PercentualMulta { get; private set; }
+        public int QtdeDiasAtraso { get; private set; }        
+        public decimal PercentualJurosDia { get; private set; }        
+        public decimal PercentualMulta { get; private set; }        
         public decimal ValorPago { get; private set; }
 
         public ContasPagarBaixa()
         {
-
         }
 
         public ContasPagarBaixa(ContasPagar contasPagar)
@@ -33,11 +34,14 @@ namespace Dominio.Principal.Entidades
 
         private void Calcular()
         {
+            if (!ContasPagar.Validar().IsValid)
+                return;
+
             //Calcula o úmero de dias de atraso (se realmente estiver atrasado).
             QtdeDiasAtraso = (ContasPagar.DataPagamento - ContasPagar.DataVencimento).Value.Days;
 
             //Título não foi pago em atraso.
-            if (QtdeDiasAtraso < 0)
+            if (QtdeDiasAtraso <= 0)
             {
                 QtdeDiasAtraso = 0;
                 ValorPago = ContasPagar.ValorOriginal;
@@ -61,7 +65,7 @@ namespace Dominio.Principal.Entidades
             if (numDiasAtraso <= 3)
                 return 2;
             
-            if (numDiasAtraso > 3 && numDiasAtraso < 5)
+            if (numDiasAtraso > 3 && numDiasAtraso <= 5)
                 return 3;
 
             return 5;
@@ -75,7 +79,7 @@ namespace Dominio.Principal.Entidades
             if (numDiasAtraso <= 3)
                 return Convert.ToDecimal(0.1);
 
-            if (numDiasAtraso > 3 && numDiasAtraso < 5)
+            if (numDiasAtraso > 3 && numDiasAtraso <= 5)
                 return Convert.ToDecimal(0.2);
 
             return Convert.ToDecimal(0.3);

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Dados.Principal.Migrations
 {
     [DbContext(typeof(DbContextTeste))]
-    [Migration("20201029192303_GenerateDatabase")]
-    partial class GenerateDatabase
+    [Migration("20201030153043_CreateDatabase")]
+    partial class CreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,16 +29,19 @@ namespace Infra.Dados.Principal.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("DataPagamento")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataVencimento")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(60)");
 
                     b.Property<decimal>("ValorOriginal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,2)");
 
                     b.HasKey("Id");
 
@@ -52,24 +55,25 @@ namespace Infra.Dados.Principal.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ContasPagarId")
+                    b.Property<int>("ContasPagarId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PercentualJurosDia")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,2)");
 
                     b.Property<decimal>("PercentualMulta")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,2)");
 
                     b.Property<int>("QtdeDiasAtraso")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ValorPago")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContasPagarId");
+                    b.HasIndex("ContasPagarId")
+                        .IsUnique();
 
                     b.ToTable("ContasPagarBaixas");
                 });
@@ -77,8 +81,10 @@ namespace Infra.Dados.Principal.Migrations
             modelBuilder.Entity("Dominio.Principal.Entidades.ContasPagarBaixa", b =>
                 {
                     b.HasOne("Dominio.Principal.Entidades.ContasPagar", "ContasPagar")
-                        .WithMany("ContasPagarBaixa")
-                        .HasForeignKey("ContasPagarId");
+                        .WithOne("ContasPagarBaixa")
+                        .HasForeignKey("Dominio.Principal.Entidades.ContasPagarBaixa", "ContasPagarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
